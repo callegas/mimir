@@ -1,0 +1,33 @@
+{
+  "name": "mimir",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": { "mimir": "dist/cli.js" },
+  "main": "dist/cli.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Personal AI game companion",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "fuse.js": "^7.1.0",
+    "ora": "^9.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.5",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}
