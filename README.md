@@ -13,69 +13,47 @@ Back in the 90s, gaming magazines were the perfect companion. You'd play blind, 
 - **Explore mode** — playing blind? Mimir gives directional hints only, respects your checkpoint, never spoils what's ahead
 - **Platinum mode** — ready to 100%? Mimir plans the most efficient trophy route, flags missables, and keeps you on track
 - **Game-isolated context** — no cross-game confusion. Your DS3 session knows nothing about your Elden Ring session
-- **Correction loop** — if an answer was wrong, `mimir wrong` tells it to try a different approach
-- **Persistent memory** — your progress, notes, and conversation history survive between sessions
+- **Persistent memory** — your progress and notes survive between sessions
 
 ## Install
 
 ```bash
 git clone https://github.com/felipecallegas/mimir
-cd mimir
-npm install
-npm run build
-npm link
+cp mimir/skill/session.md ~/.claude/skills/session.md
 ```
 
-Then add your Claude API key (get one at console.anthropic.com):
-
-```bash
-mimir setup
-```
+Requires [Claude Code](https://claude.ai/code). No API key or Node.js needed.
 
 ## Usage
 
-```bash
-# Start a new game (trophy list generated automatically)
-mimir use "Dark Souls 3"
-mimir use "Elden Ring"
-mimir use "Hollow Knight"   # works for any game
+In any Claude Code session:
 
-# Set your mode
-mimir mode explore           # blind run — minimal hints, no spoilers
-mimir mode platinum          # cleanup — full spoilers, efficient routing
-
-# Tell mimir where you are
-mimir note "Just beat Margit, heading to Stormveil"
-
-# Ask anything
-mimir ask "I keep dying here, any tips?"
-mimir ask "what build synergizes best with my remaining trophies?"
-
-# Plan your platinum
-mimir plan
-
-# Track progress
-mimir list                   # all trophies, missables highlighted
-mimir list --dlc "Shadow of the Erdtree"
-mimir done "Elden Lord"
-mimir status
-
-# Correct a bad answer
-mimir wrong
-
-# Switch games (no context bleeds between them)
-mimir use "Cyberpunk 2077"
 ```
+/session
+```
+
+Mimir will resume your last active game, or walk you through starting a new one. Trophy lists are generated from Claude's own knowledge — no external data needed.
+
+### Commands (inside a session)
+
+```
+done <trophy name>     — mark a trophy as done (fuzzy match)
+undone <trophy name>   — unmark a trophy
+list                   — show pending trophies, missables highlighted
+list all               — show all trophies including completed
+plan                   — optimal completion order for your mode
+note <text>            — update your session notes
+mode explore           — blind run mode (no spoilers)
+mode platinum          — full spoilers, efficient routing
+switch <game>          — switch to a different game
+```
+
+Or just ask anything — Mimir answers within your current mode rules.
 
 ## Philosophy
 
 Mimir doesn't play the game for you. It's the friend on the couch who's beaten it twice — they'll tell you there's something important in that room, but they won't tell you what it is until you ask. The experience is yours. Mimir just makes sure you don't miss anything.
 
-## Requirements
-
-- Node.js 18+
-- A Claude API key (Anthropic)
-
 ## Data
 
-All your data lives locally in `~/.mimir/` — one JSON file per game. Nothing is sent anywhere except your questions to the Claude API.
+All your data lives locally in `~/.mimir/` — one JSON file per game. Nothing leaves your machine.
