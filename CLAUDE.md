@@ -6,7 +6,7 @@ This repo contains the mimir game companion skill for Claude Code.
 
 Install the skill:
 ```bash
-cp skill/session.md ~/.claude/skills/session.md
+mkdir -p ~/.claude/skills/session && cp skill/session.md ~/.claude/skills/session/SKILL.md
 ```
 
 Then in any Claude Code session:
