@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/mimir-banner.png" alt="Mimir — Your AI Gaming Companion" width="100%" />
+</p>
+
 # mimir
 
 > Your AI gaming companion — like having a friend who's beaten every game.
