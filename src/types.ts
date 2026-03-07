@@ -12,7 +12,7 @@ export interface Message {
   content: string;
 }
 
-export type GameMode = "explore" | "mimirinum";
+export type GameMode = "explore" | "platinum";
 
 export interface Game {
   name: string;
