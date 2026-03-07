@@ -6,6 +6,8 @@ import { importCommand } from "./commands/import.js";
 import { statusCommand } from "./commands/status.js";
 import { noteCommand } from "./commands/note.js";
 import { modeCommand } from "./commands/mode.js";
+import { listCommand } from "./commands/list.js";
+import { doneCommand } from "./commands/done.js";
 
 const program = new Command();
 
@@ -32,5 +34,14 @@ program
 program.command("status").description("Show active game progress").action(statusCommand);
 program.command("note <text>").description("Update notes for current game").action(noteCommand);
 program.command("mode <explore|platinum>").description("Switch game mode").action(modeCommand);
+
+program
+  .command("list")
+  .description("List trophies")
+  .option("--dlc <name>", "Filter by DLC")
+  .action(listCommand);
+
+program.command("done <name>").description("Mark trophy as done").action((name) => doneCommand(name));
+program.command("undone <name>").description("Unmark a trophy").action((name) => doneCommand(name, true));
 
 program.parse();
