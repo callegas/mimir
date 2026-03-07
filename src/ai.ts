@@ -26,7 +26,7 @@ export async function chat(
   const messages: Message[] = [...game.history];
 
   if (correcting && messages.length >= 2) {
-    const lastUserMsg = messages.findLast((m) => m.role === "user");
+    const lastUserMsg = messages.findLast((m: Message) => m.role === "user");
     if (lastUserMsg) {
       messages.push({
         role: "user",
@@ -53,10 +53,9 @@ export async function chat(
   const reply = response.content[0].type === "text" ? response.content[0].text : "";
   console.log("\n" + reply + "\n");
 
-  game.history = [
-    ...messages,
-    { role: "assistant", content: reply },
-  ].slice(-MAX_HISTORY);
+  game.history = (
+    [...messages, { role: "assistant" as const, content: reply }]
+  ).slice(-MAX_HISTORY);
 
   writeGame(game);
 }
