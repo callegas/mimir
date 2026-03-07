@@ -8,6 +8,10 @@ import { noteCommand } from "./commands/note.js";
 import { modeCommand } from "./commands/mode.js";
 import { listCommand } from "./commands/list.js";
 import { doneCommand } from "./commands/done.js";
+import { askCommand } from "./commands/ask.js";
+import { planCommand } from "./commands/plan.js";
+import { wrongCommand } from "./commands/wrong.js";
+import { clearCommand } from "./commands/clear.js";
 
 const program = new Command();
 
@@ -43,5 +47,10 @@ program
 
 program.command("done <name>").description("Mark trophy as done").action((name) => doneCommand(name));
 program.command("undone <name>").description("Unmark a trophy").action((name) => doneCommand(name, true));
+
+program.command("ask <question>").description("Ask Claude about your current game").action(askCommand);
+program.command("plan").description("Generate optimal trophy completion order").action(planCommand);
+program.command("wrong").description("Previous answer was wrong — ask Claude to retry").action(wrongCommand);
+program.command("clear").description("Reset conversation history for current game").action(clearCommand);
 
 program.parse();
