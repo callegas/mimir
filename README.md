@@ -18,11 +18,11 @@ Back in the 90s, gaming magazines were the perfect companion. You'd play blind, 
 ## Install
 
 ```bash
-git clone https://github.com/felipecallegas/mimir
-cp mimir/skill/session.md ~/.claude/skills/session.md
+git clone https://github.com/callegas/mimir
+mkdir -p ~/.claude/skills/session && cp mimir/skill/session.md ~/.claude/skills/session/SKILL.md
 ```
 
-Requires [Claude Code](https://claude.ai/code). No API key or Node.js needed.
+Requires [Claude Code](https://claude.ai/code). No API key or Node.js needed. Start a new session after installing.
 
 ## Usage
 
