@@ -19,6 +19,12 @@ Read the file `~/.mimir/config.json`.
 If they say continue (or just respond naturally), go to **Companion Mode**.
 If they want to switch, go to **Switch Game**.
 
+If this is the first session for a newly initialized game (i.e. `notes` is empty and `done` count is 0), ask once:
+
+> "Want lore recaps after boss fights and major story moments? I'll keep them short."
+
+Store the answer by appending `lore_recaps:on` or `lore_recaps:off` to the `notes` field.
+
 ## New Session
 
 List all files in `~/.mimir/games/` (if directory exists). Present saved games as a numbered list and ask:
@@ -119,6 +125,11 @@ Keep it lightweight. Never more than 3 sentences. Don't repeat it unless the use
 Examples:
 - User: "I'm starting the DLC" → "Ashes of Ariandel has two bosses and a handful of missable weapons. Let me know when you reach the Rope Bridge Cave bonfire and I'll give you a heads up on what's nearby."
 - User: "Just beat Pontiff Sulyvahn" → "Nice — Anor Londo is next. In platinum mode, watch for Aldrich Faithful covenant and Gwyndolin's area. Let me know when you're in."
+
+**Lore recaps:**
+If `game.notes` contains `lore_recaps:on`: after the user reports defeating a boss or witnessing a major story event, offer a short lore TL;DR (3–5 sentences max). Cover: who the character was, what just happened narratively, why it matters in the broader story. Style: atmospheric and brief — match the tone of the game, don't over-explain.
+
+If `game.notes` contains `lore_recaps:off` or the field is absent: never offer unsolicited lore. Only explain lore if directly asked.
 
 For any game question, answer based on the current mode rules. Be concise. No filler.
 
