@@ -36,6 +36,7 @@ New games default to `explore`. Switch anytime with `mode platinum`.
 | `done <name>` | Mark a trophy as done (fuzzy match) |
 | `undone <name>` | Unmark a trophy |
 | `note <text>` | Update your notes for the current game |
+| `setup` | Show your recorded build or loadout |
 | `mode explore` / `mode platinum` | Switch mode |
 | `list` | Show pending trophies |
 | `list all` | Show all trophies including completed |
@@ -49,7 +50,9 @@ For anything else, just ask — Claude answers based on the current mode rules.
 Game state is stored as JSON in `~/.mimir/games/<slug>.json`:
 - `name` — game name
 - `mode` — `"explore"` or `"platinum"`
-- `notes` — freeform player notes
+- `notes` — freeform player notes (also stores `lore_recaps:on/off`)
+- `setup` — current build or loadout (auto-updated from conversation)
+- `area` — current in-game location (auto-updated from conversation)
 - `trophies` — array of trophy objects
 
 Active game tracked in `~/.mimir/config.json` via `activeGame` field.
