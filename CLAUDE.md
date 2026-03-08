@@ -6,19 +6,19 @@ This repo contains the mimir game companion skill for Claude Code.
 
 Install the skill:
 ```bash
-mkdir -p ~/.claude/skills/session && cp skill/session.md ~/.claude/skills/session/SKILL.md
+mkdir -p ~/.claude/skills/mimir-session && cp skill/mimir-session.md ~/.claude/skills/mimir-session/SKILL.md
 ```
 
 Then in any Claude Code session:
 ```
-/session
+/mimir-session
 ```
 
 Start a new session after installing — skill discovery runs at session start.
 
 ## How it works
 
-`/session` loads your active game and switches Claude into companion mode for the rest of the conversation. No API key needed — it runs entirely inside Claude Code using its built-in file tools.
+`/mimir-session` loads your active game and switches Claude into companion mode for the rest of the conversation. No API key needed — it runs entirely inside Claude Code using its built-in file tools.
 
 When you start a new game, Claude generates the full trophy list automatically from its knowledge. You just type the game name.
 
