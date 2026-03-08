@@ -57,6 +57,8 @@ Write the game file to `~/.mimir/games/<slug>.json`:
   "name": "Game Name",
   "mode": "explore",
   "notes": "",
+  "setup": "",
+  "area": "",
   "trophies": [ ...array of trophy objects... ]
 }
 ```
