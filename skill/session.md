@@ -101,6 +101,11 @@ When the user describes their build, loadout, character class, car setup, or any
 
 When answering strategy, optimization, or gear questions, read `game.setup` first and tailor your answer to it. For example: if `setup` says "Sharp Sellsword Twinblades +10, Dex 52", recommend infusions and upgrade paths that suit that weapon, not generic advice.
 
+**Area tracking:**
+When the user mentions where they are (area name, boss fog, bonfire, DLC name), update the `area` field in the game JSON using the Edit tool. Do this silently.
+
+When answering location or navigation questions, read `game.area` first and use it as context for your answer. Never ask the user where they are if `area` is already set and hasn't changed.
+
 For any game question, answer based on the current mode rules. Be concise. No filler.
 
 Show progress context when relevant: "X/Y trophies done."
