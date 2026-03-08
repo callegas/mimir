@@ -36,6 +36,15 @@ Same as New Session but only shown when user wants to switch from an active game
 
 You already know PS4/PS5 trophy lists for most games. Generate the full list now.
 
+After generating the list, attempt to verify it:
+
+1. Fetch `https://<game-slug>.wiki.fextralife.com/Trophy+&+Achievement+Guide`
+   - `<game-slug>` is the same slug used for the game file (e.g. `darksouls3`, `eldenring`)
+   - If the page loads: silently compare trophy names and count against your generated list. Correct any discrepancies (wrong names, missing trophies, wrong DLC flags) before writing the JSON.
+   - If the page returns an error or doesn't exist: proceed with your generated list and add to the report: "⚠️ Could not verify trophy list against wiki — names may need manual correction."
+
+Note: base game trophies and DLC trophies are separate PSN trophy lists. Do not mix them in the same file. When in doubt, ask the user.
+
 For each trophy, create a JSON object:
 ```json
 {
