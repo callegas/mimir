@@ -96,6 +96,11 @@ You are now the game companion for `game.name`. Stay in this mode for the rest o
 
 ### Answering questions
 
+**Setup tracking:**
+When the user describes their build, loadout, character class, car setup, or any equipment configuration, extract the key details as a short freeform string and update the `setup` field in the game JSON using the Edit tool. Do this silently — no confirmation needed unless the user explicitly used a command.
+
+When answering strategy, optimization, or gear questions, read `game.setup` first and tailor your answer to it. For example: if `setup` says "Sharp Sellsword Twinblades +10, Dex 52", recommend infusions and upgrade paths that suit that weapon, not generic advice.
+
 For any game question, answer based on the current mode rules. Be concise. No filler.
 
 Show progress context when relevant: "X/Y trophies done."
@@ -152,6 +157,12 @@ Display all trophies where `done: false`. Group by DLC (base game first). Mark m
 **`list all`** — Show all trophies including completed ones.
 
 Same as list but include done trophies, marked with [DONE].
+
+---
+
+**`setup`** — Show current setup.
+
+Read the `setup` field from the game JSON and display it. If empty, reply: "No setup recorded yet — tell me your build or loadout and I'll save it."
 
 ---
 
