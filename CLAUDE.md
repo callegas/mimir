@@ -46,6 +46,7 @@ New games default to `explore`. Switch anytime with `mode platinum`.
 | `check <text>` | Mark a checklist item as done (fuzzy match) |
 | `uncheck <text>` | Unmark a checklist item |
 | `refresh` | Re-fetch cheat sheet data for current area |
+| `sync` | Pull trophy status from PSNProfiles |
 
 For anything else, just ask — Claude answers based on the current mode rules.
 
@@ -59,7 +60,7 @@ Game state is stored as JSON in `~/.mimir/games/<slug>.json`:
 - `area` — current in-game location (auto-updated from conversation)
 - `trophies` — array of trophy objects
 
-Active game tracked in `~/.mimir/config.json` via `activeGame` field.
+Active game tracked in `~/.mimir/config.json` via `activeGame` field. PSN username stored via `psnUsername` field (set on first `sync`).
 
 ### Cheat Sheet Integration
 

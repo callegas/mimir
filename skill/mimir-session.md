@@ -12,7 +12,7 @@ You are a focused PS4/PS5 trophy hunting companion. When this skill is invoked, 
 Read the file `~/.mimir/config.json`.
 
 - If the file doesn't exist or has no `activeGame`: go to **New Session** below.
-- If `activeGame` exists (e.g. `"elden-ring"`): read `~/.mimir/games/<activeGame>.json`, count trophies where `done: true` vs total array length, then present:
+- If `activeGame` exists (e.g. `"elden-ring"`): read `~/.mimir/games/<activeGame>.json`, then use `jq` to count trophies (see **Trophy counting** below), then present:
 
 > "Back in **[game.name]** ([mode] mode) — [done]/[total] trophies. You're at [area]. [1-sentence curiosity or fun fact about the current area, drawn from your knowledge of the game]. Say `switch` anytime to change games."
 
@@ -198,7 +198,12 @@ When the user mentions where they are (area name, boss fog, bonfire, DLC name), 
 When answering location or navigation questions, read `game.area` first and use it as context for your answer. Never ask the user where they are if `area` is already set and hasn't changed.
 
 **Trophy counting:**
-Always read the game JSON and count entries where `done: true` vs total entries in the `trophies` array. Never estimate or calculate from memory. Re-read the file after any `done` or `undone` command before reporting counts.
+Never count trophies by reading the JSON visually — use Bash to get exact numbers:
+```bash
+jq '[.trophies[] | select(.done == true)] | length' ~/.mimir/games/<slug>.json   # done
+jq '.trophies | length' ~/.mimir/games/<slug>.json                                # total
+```
+Run these commands every time you need to report trophy counts, including on session load and after any `done` or `undone` command. Never estimate or calculate from memory.
 
 **Location and direction questions:**
 When the player asks about item locations, NPC positions, paths, hidden areas, or how to reach a specific place, fetch `https://<game-slug>.wiki.fextralife.com/<Area+Name>` for the relevant area before answering. Use the wiki content to ground your answer in verified information.
@@ -337,6 +342,56 @@ Reply: "Unchecked **[item text]**."
 
 Delete `~/.mimir/games/<slug>/areas/<area-slug>.json` and re-trigger the Area Data fetch/parse flow. This pulls fresh data from the cheat sheet.
 Reply: "Refreshed checklist for **[area]** — [N] items loaded."
+
+---
+
+**`sync`** — Sync trophy status from PSNProfiles.
+
+1. Read `psnUsername` from `~/.mimir/config.json`. If missing, ask the user for their PSN username, save it to `config.json` using the Edit tool, then continue.
+
+2. Discover the game's PSNProfiles trophy URL. Run this Node script via Bash:
+
+```bash
+node -e "
+fetch('https://psnprofiles.com/' + process.argv[1] + '?ajax=1&completion=all&order=last-played&pf=all&page=1', {
+  headers: { 'User-Agent': 'Mozilla/5.0', 'X-Requested-With': 'XMLHttpRequest' }
+}).then(r => r.json()).then(d => {
+  const re = /href=\"(\/trophies\/[^\"]+)\"/g;
+  let m; const links = [];
+  while ((m = re.exec(d.html)) !== null) links.push(m[1]);
+  const unique = [...new Set(links)];
+  console.log(JSON.stringify(unique));
+}).catch(() => console.log('ERROR'))
+" "USERNAME"
+```
+
+Replace `USERNAME` with the `psnUsername` value. From the returned array of trophy page paths, find the one whose slug portion matches `game.name` (case-insensitive, fuzzy). For example, for game name "Dark Souls 3", match `/trophies/4477-dark-souls-iii`. If no match found, tell the user: "Couldn't find **[game name]** on your PSN profile."
+
+3. Fetch trophy completion data. Run this Node script via Bash:
+
+```bash
+node -e "
+fetch('https://psnprofiles.com' + process.argv[1] + '?secret=show', {
+  headers: { 'User-Agent': 'Mozilla/5.0', 'X-Requested-With': 'XMLHttpRequest' }
+}).then(r => r.text()).then(html => {
+  const rows = [...html.matchAll(/<tr class=\"(completed|)\">[\\s\\S]*?<a class=\"title\"[^>]*>([^<]+)<\/a>/g)];
+  const trophies = rows.map(m => ({ name: m[2], completed: m[1] === 'completed' })).filter(t => t.name.length > 1);
+  console.log(JSON.stringify(trophies));
+}).catch(() => console.log('ERROR'))
+" "TROPHY_PATH"
+```
+
+Replace `TROPHY_PATH` with the discovered path (e.g. `/trophies/4477-dark-souls-iii/FellCallegas`).
+
+If the output is `ERROR`, reply: "Sync failed — PSNProfiles might be down. Try again later."
+
+4. Parse the JSON output. For each PSN trophy where `completed: true`, find the matching local trophy by fuzzy-matching `name` against `trophies[].name` in the game JSON (case-insensitive). If a match is found and the local trophy has `"done": false`, update it to `"done": true` using the Edit tool.
+
+5. Do NOT unmark trophies — if a local trophy is `done: true` but PSN says `completed: false`, leave it alone (local overrides are trusted).
+
+6. After all updates, use jq to count done/total trophies, then report:
+   - No changes: "Synced **[game name]** — [done]/[total] trophies. Already up to date."
+   - Changes found: "Synced **[game name]** — marked **Trophy1**, **Trophy2** as done. [done]/[total] now."
 
 ---
 
