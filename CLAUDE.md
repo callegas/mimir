@@ -42,6 +42,10 @@ New games default to `explore`. Switch anytime with `mode platinum`.
 | `list all` | Show all trophies including completed |
 | `plan` | Generate optimal completion order |
 | `switch <game>` | Switch to a different saved game |
+| `checklist` | Show full checklist for current area |
+| `check <text>` | Mark a checklist item as done (fuzzy match) |
+| `uncheck <text>` | Unmark a checklist item |
+| `refresh` | Re-fetch cheat sheet data for current area |
 
 For anything else, just ask — Claude answers based on the current mode rules.
 
@@ -56,3 +60,14 @@ Game state is stored as JSON in `~/.mimir/games/<slug>.json`:
 - `trophies` — array of trophy objects
 
 Active game tracked in `~/.mimir/config.json` via `activeGame` field.
+
+### Cheat Sheet Integration
+
+Cheat sheet registry in `~/.mimir/cheatsheets.json`:
+- Maps game slugs to external cheat sheet URLs
+- `provider` field determines HTML parsing strategy
+
+Area checklists cached in `~/.mimir/games/<slug>/areas/<area-slug>.json`:
+- Fetched on demand from cheat sheet when entering a new area
+- Items are trackable with `check`/`uncheck` commands
+- Separate from trophy tracking (`done`/`undone`)
