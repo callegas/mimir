@@ -295,4 +295,49 @@ Go to **Switch Game** flow, fuzzy-matching `<game>` against saved game slugs fir
 
 ---
 
+**`checklist`** — Show full checklist for current area.
+
+Read the area data file at `~/.mimir/games/<slug>/areas/<area-slug>.json` (where `<area-slug>` is derived from `game.area`). If the file doesn't exist and the game has a cheat sheet entry, trigger the Area Data fetch/parse flow first.
+
+Display all items grouped by category. Mark completed items with [DONE]. Show counts per category.
+
+Format:
+> **[Area Name]** — [done]/[total] items
+>
+> **Bosses**
+> - [ ] Kill Vordt of the Boreal Valley
+>
+> **NPCs**
+> - [x] Talk to Greirat in his cell [DONE]
+> - [ ] Talk to Emma for the Small Lothric Banner
+>
+> **Estus**
+> - [ ] Estus Shard on the anvil
+>
+> *(etc. for each category with items)*
+
+---
+
+**`check <text>`** — Mark a checklist item as done.
+
+Fuzzy-match `<text>` against items in the current area's checklist (from `~/.mimir/games/<slug>/areas/<area-slug>.json`). Find the closest match.
+Set `"done": true` on that item using the Edit tool.
+Reply: "Checked **[item text]**. [remaining]/[total] items left in [area]."
+
+---
+
+**`uncheck <text>`** — Unmark a checklist item.
+
+Same fuzzy match, set `"done": false`.
+Reply: "Unchecked **[item text]**."
+
+---
+
+**`refresh`** — Re-fetch cheat sheet data for current area.
+
+Delete `~/.mimir/games/<slug>/areas/<area-slug>.json` and re-trigger the Area Data fetch/parse flow. This pulls fresh data from the cheat sheet.
+Reply: "Refreshed checklist for **[area]** — [N] items loaded."
+
+---
+
 For anything else, answer as the game companion per mode rules.
