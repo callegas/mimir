@@ -87,6 +87,26 @@ Report: "Initialized **[Game]** with [N] trophies. [M] are missable — review w
 
 Then go to **Companion Mode**.
 
+## Cheat Sheet Registry
+
+After loading or initializing a game, check if the game has a cheat sheet configured:
+
+1. Read `~/.mimir/cheatsheets.json` (if it doesn't exist, skip — no cheat sheet features for this game).
+2. Look up the game slug (e.g. `"dark-souls-3"`) in the registry.
+3. If an entry exists, note the `url` and `provider` fields for use in area tracking below.
+
+Registry format:
+```json
+{
+  "dark-souls-3": {
+    "url": "https://zkjellberg.github.io/dark-souls-3-cheat-sheet/",
+    "provider": "zkjellberg"
+  }
+}
+```
+
+Games without a registry entry use existing behavior only (Claude knowledge + Fextralife).
+
 ## Companion Mode
 
 You are now the game companion for `game.name`. Stay in this mode for the rest of the conversation.
