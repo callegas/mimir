@@ -107,6 +107,59 @@ Registry format:
 
 Games without a registry entry use existing behavior only (Claude knowledge + Fextralife).
 
+## Area Data (Cheat Sheet)
+
+When `game.area` is updated (user enters a new area) and the game has a cheat sheet registry entry:
+
+1. **Check cache:** look for `~/.mimir/games/<slug>/areas/<area-slug>.json` where `<area-slug>` is the area name lowercased with spaces replaced by `-` and special chars removed.
+   - If the file exists → read it and use the cached data. Skip to step 6.
+   - If not → proceed to fetch.
+
+2. **Fetch:** GET the cheat sheet URL from the registry.
+
+3. **Parse (ZKjellberg provider):** Find the `<h3>` heading whose text matches the current area (match by replacing spaces with underscores in the heading ID, or fuzzy-match against all `<h3>` headings if no exact match). Extract all `<li>` items from the `<ul>` that follows that heading.
+
+4. **Map each `<li>` to a checklist item:**
+   ```json
+   {
+     "id": "<data-id attribute value>",
+     "text": "<text content of the li, preserving link text inline>",
+     "category": "<mapped from CSS class>",
+     "npc": "<kebab-case NPC name if category is npc, else null>",
+     "done": false
+   }
+   ```
+
+   Category mapping from CSS classes:
+   - `f_misc` → `misc`
+   - `f_boss` → `boss`
+   - `f_ring` → `ring`
+   - `f_npc` → `npc`
+   - `f_weap` → `weapon`
+   - `f_estus` → `estus`
+   - `f_bone` → `bone`
+   - `f_arm` → `armor`
+   - `f_gem` → `gem`
+   - `f_gest` → `gesture`
+   - `f_tit` → `titanite`
+
+   If multiple `f_` classes exist, use the most specific one (prefer `npc` > `boss` > `estus` > `bone` > `ring` > `gest` > `gem` > `weap` > `arm` > `tit` > `misc`).
+
+   For `npc` items: extract the NPC name from the text (e.g. "Talk to Greirat" → `"greirat"`). Use kebab-case.
+
+5. **Write:** save to `~/.mimir/games/<slug>/areas/<area-slug>.json`:
+   ```json
+   {
+     "name": "Area Name",
+     "items": [ ...array of checklist items... ]
+   }
+   ```
+   Create the `areas/` directory if it doesn't exist.
+
+6. **Surface:** proceed to the scout report or checklist display as described in Companion Mode.
+
+If the fetch fails or the area is not found in the cheat sheet, continue without cheat sheet data — fall back to existing behavior.
+
 ## Companion Mode
 
 You are now the game companion for `game.name`. Stay in this mode for the rest of the conversation.
