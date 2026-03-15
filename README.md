@@ -19,17 +19,17 @@ Back in the 90s, gaming magazines were the perfect companion. You'd play blind, 
 
 ```bash
 git clone https://github.com/callegas/mimir
-mkdir -p ~/.claude/skills/session && cp mimir/skill/session.md ~/.claude/skills/session/SKILL.md
+mkdir -p ~/.claude/skills/mimir-session && cp mimir/skill/mimir-session.md ~/.claude/skills/mimir-session/SKILL.md
 ```
 
-Requires [Claude Code](https://claude.ai/code). No API key or Node.js needed. Start a new session after installing.
+Requires [Claude Code](https://claude.ai/code). No API key needed — Node.js only for the optional `sync` command. Start a new session after installing.
 
 ## Usage
 
 In any Claude Code session:
 
 ```
-/session
+/mimir-session
 ```
 
 Mimir will resume your last active game, or walk you through starting a new one. Trophy lists are generated from Claude's own knowledge — no external data needed.
@@ -43,9 +43,15 @@ list                   — show pending trophies, missables highlighted
 list all               — show all trophies including completed
 plan                   — optimal completion order for your mode
 note <text>            — update your session notes
+setup                  — show your recorded build or loadout
 mode explore           — blind run mode (no spoilers)
 mode platinum          — full spoilers, efficient routing
 switch <game>          — switch to a different game
+checklist              — show full checklist for current area
+check <text>           — mark a checklist item as done
+uncheck <text>         — unmark a checklist item
+refresh                — re-fetch cheat sheet data for current area
+sync                   — pull trophy status from PSNProfiles
 ```
 
 Or just ask anything — Mimir answers within your current mode rules.
@@ -56,4 +62,4 @@ Mimir doesn't play the game for you. It's the friend on the couch who's beaten i
 
 ## Data
 
-All your data lives locally in `~/.mimir/` — one JSON file per game. Nothing leaves your machine.
+All your data lives locally in `~/.mimir/` — one JSON file per game. Cheat sheet checklists are cached per area. The only external calls are optional: Fextralife wiki for trophy verification, cheat sheet providers for area data, and PSNProfiles for `sync`.
