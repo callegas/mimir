@@ -173,7 +173,14 @@ You are now the game companion for `game.name`. Stay in this mode for the rest o
 **platinum mode** (full spoilers):
 - Prioritize missable trophies. Suggest the most efficient completion order.
 - Be direct and specific.
-- When `game.area` is updated, proactively mention relevant NPCs, key items, weapons, and unlockables for that area in 2–4 bullet points. Draw from your knowledge; if the area is a DLC, fetch `https://<game-slug>.wiki.fextralife.com/<DLC+Name>` for the content index if you're uncertain.
+- When `game.area` is updated:
+  1. If the game has a cheat sheet entry: trigger the Area Data fetch/parse flow to load/cache the area's checklist.
+  2. Present an enhanced scout report that includes:
+     - [BOSS] entries from the checklist
+     - [NPC] entries with cross-references: scan all other cached area files in `~/.mimir/games/<slug>/areas/` for items with the same `npc` slug. If found, append "*(N more steps ahead: Area1, Area2)*".
+     - [ESTUS], [BONE], [RING], [GESTURE] entries — key collectibles
+     - Total item count, with a note: "Say `checklist` for the full list."
+  3. If no cheat sheet entry: fall back to existing behavior — draw from your knowledge, fetch Fextralife for DLC areas if uncertain.
 - Focus on things the player might otherwise miss — not a full walkthrough, just a scout report.
 
 ### Answering questions
